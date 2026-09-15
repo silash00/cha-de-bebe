@@ -1,12 +1,17 @@
 /**
- * Supabase. A anon key é pública por natureza — vai no bundle JS porque o
- * navegador precisa dela. Isso é previsto, não vazamento: as tabelas não têm
- * grant para `anon`, e as duas funções RPC são a única superfície exposta.
+ * Supabase. A publishable key (`sb_publishable_...`, o que antes se chamava
+ * anon key) é pública por natureza — vai no bundle JS porque o navegador
+ * precisa dela. Isso é previsto, não vazamento: ela resolve para o papel
+ * `anon` do Postgres, que não tem grant em tabela nenhuma. As duas funções
+ * RPC são a única superfície exposta.
  *
- * A chave `service_role` NUNCA entra aqui.
+ * A secret key (`sb_secret_...`, antiga `service_role`) NUNCA entra aqui:
+ * ela ignora RLS e permissões.
+ *
+ * SUPABASE_URL é a raiz do projeto, SEM /rest/v1 — o api.ts monta o caminho.
  */
-export const SUPABASE_URL = 'COLE_AQUI_A_PROJECT_URL';
-export const SUPABASE_ANON_KEY = 'COLE_AQUI_A_ANON_KEY';
+export const SUPABASE_URL = 'https://pemswwaebhidbwjaqjub.supabase.co';
+export const SUPABASE_PUBLISHABLE_KEY = 'COLE_AQUI_A_PUBLISHABLE_KEY';
 
 export const TIMEOUT_MS = 15000;
 

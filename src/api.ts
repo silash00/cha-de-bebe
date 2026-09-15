@@ -1,4 +1,4 @@
-import { BACKOFF_MS, SUPABASE_ANON_KEY, SUPABASE_URL, TIMEOUT_MS } from './config';
+import { BACKOFF_MS, SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL, TIMEOUT_MS } from './config';
 import type { Convite, Pessoa, RespostaGet, RespostaPost } from './types';
 
 export type ResultadoBusca =
@@ -27,8 +27,8 @@ async function chamar(fn: string, body: Record<string, unknown>): Promise<unknow
     const resp = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
       method: 'POST',
       headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(body),
