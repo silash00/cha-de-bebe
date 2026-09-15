@@ -11,7 +11,7 @@
  * SUPABASE_URL é a raiz do projeto, SEM /rest/v1 — o api.ts monta o caminho.
  */
 export const SUPABASE_URL = 'https://pemswwaebhidbwjaqjub.supabase.co';
-export const SUPABASE_PUBLISHABLE_KEY = 'COLE_AQUI_A_PUBLISHABLE_KEY';
+export const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_xZVxG7CdO5D_A9P9kcu3Fw_7CGEB8bp';
 
 export const TIMEOUT_MS = 15000;
 
