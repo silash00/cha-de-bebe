@@ -1,17 +1,19 @@
 /**
- * Supabase. A publishable key (`sb_publishable_...`, o que antes se chamava
- * anon key) é pública por natureza — vai no bundle JS porque o navegador
- * precisa dela. Isso é previsto, não vazamento: ela resolve para o papel
- * `anon` do Postgres, que não tem grant em tabela nenhuma. As duas funções
- * RPC são a única superfície exposta.
+ * Configuração do Supabase, vinda de variáveis de build.
  *
- * A secret key (`sb_secret_...`, antiga `service_role`) NUNCA entra aqui:
- * ela ignora RLS e permissões.
+ * O prefixo VITE_ é obrigatório: só variáveis com ele são expostas ao código
+ * do cliente pelo Vite.
  *
- * SUPABASE_URL é a raiz do projeto, SEM /rest/v1 — o api.ts monta o caminho.
+ * Sobre a publishable key: ela NÃO é segredo e não há como torná-la um. O Vite
+ * a compila para dentro do bundle, que todo visitante baixa — qualquer um lê no
+ * DevTools. Mantê-la fora do repositório é higiene, não proteção. O que
+ * realmente protege é o banco: as tabelas não têm grant para `anon`, e as duas
+ * funções RPC exigem um token de convite válido.
+ *
+ * A secret key (`sb_secret_...`) NUNCA entra aqui nem em variável VITE_.
  */
-export const SUPABASE_URL = 'https://pemswwaebhidbwjaqjub.supabase.co';
-export const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_xZVxG7CdO5D_A9P9kcu3Fw_7CGEB8bp';
+export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL ?? '';
+export const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? '';
 
 export const TIMEOUT_MS = 15000;
 

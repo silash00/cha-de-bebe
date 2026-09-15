@@ -1,10 +1,9 @@
 # Mantém o projeto Supabase ativo: o free tier pausa após ~7 dias de baixa
 # atividade, e a janela entre o disparo dos convites e o chá é de 24 dias.
 #
-# A chave abaixo é a publishable key, pública por natureza — ela já está no
-# bundle JS que qualquer visitante do site baixa. Não usar secrets aqui é
-# deliberado: um secret ausente faria este workflow falhar em silêncio, e o
-# projeto pausaria sem ninguém perceber.
+# URL e chave vêm dos secrets do repositório, para não deixar credencial em
+# arquivo versionado. Se um deles faltar, o curl falha e o job fica vermelho —
+# preferível a pausar o projeto em silêncio.
 name: Keep Supabase alive
 
 on:
@@ -13,8 +12,8 @@ on:
   workflow_dispatch:
 
 env:
-  SUPABASE_URL: https://pemswwaebhidbwjaqjub.supabase.co
-  SUPABASE_PUBLISHABLE_KEY: sb_publishable_xZVxG7CdO5D_A9P9kcu3Fw_7CGEB8bp
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
 
 jobs:
   ping:
