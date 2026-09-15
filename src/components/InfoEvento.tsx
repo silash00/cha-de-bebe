@@ -4,13 +4,13 @@ export default function InfoEvento() {
   return (
     <section className="space-y-3 text-stone-700">
       <div>
-        <p className="text-xs uppercase tracking-wide text-stone-400">Quando</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-stone-500">Quando</p>
         <p>
           {EVENTO.data}, às {EVENTO.hora}
         </p>
       </div>
       <div>
-        <p className="text-xs uppercase tracking-wide text-stone-400">Onde</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-stone-500">Onde</p>
         <p>{EVENTO.local}</p>
         <p className="text-sm text-stone-500">{EVENTO.endereco}</p>
         <p className="text-sm text-stone-500">({EVENTO.referencia})</p>

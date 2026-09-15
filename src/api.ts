@@ -6,7 +6,15 @@ export type ResultadoBusca =
   | { tipo: 'nao_encontrado' }
   | { tipo: 'erro' };
 
-export type ResultadoEnvio = { tipo: 'ok' } | { tipo: 'erro' };
+/**
+ * 'convite_mudou': a lista de pessoas na planilha divergiu do que o convidado
+ * tem na tela (linha inserida, removida, reordenada ou nome corrigido). Nada
+ * foi gravado — a tela precisa recarregar o convite antes de tentar de novo.
+ */
+export type ResultadoEnvio =
+  | { tipo: 'ok' }
+  | { tipo: 'convite_mudou' }
+  | { tipo: 'erro' };
 
 async function comTimeout(url: string, init?: RequestInit): Promise<unknown> {
   const controller = new AbortController();
@@ -32,6 +40,11 @@ export async function buscarConvite(token: string, preview: boolean): Promise<Re
       const erro = data && 'erro' in data ? data.erro : '';
       return erro === 'nao_encontrado' ? { tipo: 'nao_encontrado' } : { tipo: 'erro' };
     }
+
+    // O backend sempre manda um array, mas a resposta ja chegou malformada em
+    // falha intermitente do Apps Script. Sem esta guarda o convite passa como
+    // valido e o estouro acontece la na frente, num .map() de componente.
+    if (!Array.isArray(data.pessoas)) return { tipo: 'erro' };
 
     return {
       tipo: 'ok',
@@ -61,7 +74,11 @@ export async function confirmar(
       body: JSON.stringify({ token, pessoas, recado }),
     })) as RespostaPost;
 
-    return data && data.ok === true ? { tipo: 'ok' } : { tipo: 'erro' };
+    if (data && data.ok === true) return { tipo: 'ok' };
+    if (data && 'erro' in data && data.erro === 'convite_mudou') {
+      return { tipo: 'convite_mudou' };
+    }
+    return { tipo: 'erro' };
   } catch {
     return { tipo: 'erro' };
   }

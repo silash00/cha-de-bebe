@@ -74,6 +74,38 @@ describe('buscarConvite', () => {
     await buscarConvite('k3n8fq', false);
     expect(String(spy.mock.calls[0][0])).not.toContain('preview');
   });
+
+  it('devolve erro quando a resposta chega sem o array de pessoas', async () => {
+    mockFetch({
+      ok: true, saudacao: 'x', pessoas: null, fralda: null, recado: null, respondido_em: null,
+    });
+    expect(await buscarConvite('k3n8fq', false)).toEqual({ tipo: 'erro' });
+  });
+
+  it('devolve erro quando o corpo nao e JSON (Apps Script devolve HTML)', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => {
+          throw new SyntaxError('Unexpected token < in JSON');
+        },
+      })
+    );
+    expect(await buscarConvite('k3n8fq', false)).toEqual({ tipo: 'erro' });
+  });
+
+  it('confia no campo ok do corpo, nao no status HTTP', async () => {
+    // Decisao deliberada: o Apps Script responde 200 com {ok:false} em erro de
+    // negocio, e ja devolveu corpo JSON valido junto de status nao-2xx. Nao
+    // adicione `if (!resp.ok) throw` — este teste existe para travar isso.
+    mockFetch(
+      { ok: true, saudacao: 'Fulano', pessoas: [], fralda: null, recado: null, respondido_em: null },
+      false
+    );
+    const r = await buscarConvite('k3n8fq', false);
+    expect(r.tipo).toBe('ok');
+  });
 });
 
 describe('confirmar', () => {
@@ -104,6 +136,24 @@ describe('confirmar', () => {
 
   it('devolve erro quando a rede falha', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
+    expect(await confirmar('k3n8fq', [], '')).toEqual({ tipo: 'erro' });
+  });
+
+  it('distingue convite_mudou de erro generico', async () => {
+    mockFetch({ ok: false, erro: 'convite_mudou' });
+    expect(await confirmar('k3n8fq', [], '')).toEqual({ tipo: 'convite_mudou' });
+  });
+
+  it('devolve erro quando o corpo do POST nao e JSON', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => {
+          throw new SyntaxError('Unexpected token <');
+        },
+      })
+    );
     expect(await confirmar('k3n8fq', [], '')).toEqual({ tipo: 'erro' });
   });
 });
