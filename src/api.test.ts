@@ -1,0 +1,109 @@
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { buscarConvite, confirmar } from './api';
+
+function mockFetch(payload: unknown, ok = true) {
+  const spy = vi.fn().mockResolvedValue({ ok, json: async () => payload });
+  vi.stubGlobal('fetch', spy);
+  return spy;
+}
+
+afterEach(() => vi.unstubAllGlobals());
+
+describe('buscarConvite', () => {
+  it('mapeia a resposta de sucesso para o formato interno', async () => {
+    mockFetch({
+      ok: true,
+      saudacao: 'Fulano e Ciclana',
+      pessoas: [{ nome: 'Fulano', status: 'sim' }],
+      fralda: 'P',
+      recado: null,
+      respondido_em: '2026-09-19 21:06',
+    });
+
+    const r = await buscarConvite('k3n8fq', false);
+
+    expect(r).toEqual({
+      tipo: 'ok',
+      convite: {
+        saudacao: 'Fulano e Ciclana',
+        pessoas: [{ nome: 'Fulano', status: 'sim' }],
+        fralda: 'P',
+        recado: null,
+        respondidoEm: '2026-09-19 21:06',
+      },
+    });
+  });
+
+  it('devolve nao_encontrado quando o backend nao acha o token', async () => {
+    mockFetch({ ok: false, erro: 'nao_encontrado' });
+    expect(await buscarConvite('xxx', false)).toEqual({ tipo: 'nao_encontrado' });
+  });
+
+  it('devolve erro quando o backend falha internamente', async () => {
+    mockFetch({ ok: false, erro: 'interno' });
+    expect(await buscarConvite('k3n8fq', false)).toEqual({ tipo: 'erro' });
+  });
+
+  it('devolve erro quando a rede falha', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
+    expect(await buscarConvite('k3n8fq', false)).toEqual({ tipo: 'erro' });
+  });
+
+  it('envia o token no parametro token, nunca em c', async () => {
+    const spy = mockFetch({
+      ok: true, saudacao: 'x', pessoas: [], fralda: null, recado: null, respondido_em: null,
+    });
+    await buscarConvite('k3n8fq', false);
+    const url = String(spy.mock.calls[0][0]);
+    expect(url).toContain('token=k3n8fq');
+    expect(url).not.toMatch(/[?&]c=/);
+  });
+
+  it('passa preview=1 na URL quando preview e true', async () => {
+    const spy = mockFetch({
+      ok: true, saudacao: 'x', pessoas: [], fralda: null, recado: null, respondido_em: null,
+    });
+    await buscarConvite('k3n8fq', true);
+    expect(String(spy.mock.calls[0][0])).toContain('preview=1');
+  });
+
+  it('nao passa preview na URL quando preview e false', async () => {
+    const spy = mockFetch({
+      ok: true, saudacao: 'x', pessoas: [], fralda: null, recado: null, respondido_em: null,
+    });
+    await buscarConvite('k3n8fq', false);
+    expect(String(spy.mock.calls[0][0])).not.toContain('preview');
+  });
+});
+
+describe('confirmar', () => {
+  it('envia o corpo como text/plain para nao disparar preflight', async () => {
+    const spy = mockFetch({ ok: true });
+
+    await confirmar('k3n8fq', [{ nome: 'Fulano', status: 'sim' }], 'oi');
+
+    const init = spy.mock.calls[0][1] as RequestInit;
+    expect(init.method).toBe('POST');
+    expect((init.headers as Record<string, string>)['Content-Type']).toBe('text/plain');
+    expect(JSON.parse(init.body as string)).toEqual({
+      token: 'k3n8fq',
+      pessoas: [{ nome: 'Fulano', status: 'sim' }],
+      recado: 'oi',
+    });
+  });
+
+  it('devolve ok quando o backend confirma', async () => {
+    mockFetch({ ok: true });
+    expect(await confirmar('k3n8fq', [], '')).toEqual({ tipo: 'ok' });
+  });
+
+  it('devolve erro quando o backend recusa', async () => {
+    mockFetch({ ok: false, erro: 'nao_encontrado' });
+    expect(await confirmar('k3n8fq', [], '')).toEqual({ tipo: 'erro' });
+  });
+
+  it('devolve erro quando a rede falha', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('offline')));
+    expect(await confirmar('k3n8fq', [], '')).toEqual({ tipo: 'erro' });
+  });
+});
