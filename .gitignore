@@ -6,3 +6,4 @@ dist
 # Backend e documentação ficam apenas locais
 apps-script/
 docs/
+supabase/
