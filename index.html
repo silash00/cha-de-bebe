@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Chá de Bebê</title>
+
+    <!-- Card do WhatsApp. og:image PRECISA de URL absoluta: o crawler nao
+         resolve caminho relativo. Ele tambem nao executa JavaScript, entao le
+         so este HTML — e por isso gerar o preview nao marca visto_em. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Chá de bebê" />
+    <meta
+      property="og:description"
+      content="Você foi convidado! Toque para ver o convite e confirmar presença."
+    />
+    <meta property="og:image" content="https://cha.silashenrique.dev/og-image.png" />
+    <meta property="og:url" content="https://cha.silashenrique.dev/" />
+    <meta name="theme-color" content="#fafaf9" />
     <script type="module" crossorigin src="/assets/index-Dx33Osij.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-CPMDNIy0.css">
   </head>
