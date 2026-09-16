@@ -4,6 +4,7 @@ import { EVENTO } from '../config';
 import * as m from 'motion/react-m';
 import Cabecalho from './Cabecalho';
 import Divisor, { PAPEL, SECAO } from './Ornamento';
+import Icone from './Icone';
 import InfoEvento from './InfoEvento';
 import ListaPessoas from './ListaPessoas';
 
@@ -52,7 +53,10 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
         <m.div variants={SECAO}>
           <div aria-hidden="true" className="filete mt-10" />
           <section className="mt-10 text-center">
-            <p className="rotulo">Presente</p>
+            <p className="rotulo">
+              <Icone nome="presente" atraso={0.2} />
+              Presente
+            </p>
             <p className="display mt-2 text-[1.375rem] font-semibold text-tinta">
               Fraldas tamanho {convite.fralda}
             </p>

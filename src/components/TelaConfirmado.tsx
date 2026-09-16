@@ -2,6 +2,7 @@ import type { Convite } from '../types';
 import * as m from 'motion/react-m';
 import { EVENTO } from '../config';
 import Divisor, { LAYOUT_NOME } from './Ornamento';
+import Icone from './Icone';
 import InfoEvento from './InfoEvento';
 
 interface Props {
@@ -90,7 +91,10 @@ export default function TelaConfirmado({ convite, onEditar }: Props) {
 
         {convite.fralda && !ninguemVai && (
           <p className="mt-7 text-center">
-            <span className="rotulo">Presente combinado</span>
+            <span className="rotulo block">
+              <Icone nome="presente" atraso={0.2} />
+              Presente combinado
+            </span>
             <span className="display mt-2 block text-[1.25rem] font-semibold text-tinta">
               Fraldas tamanho {convite.fralda}
             </span>
