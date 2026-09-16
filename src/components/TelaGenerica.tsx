@@ -1,4 +1,5 @@
 import { EVENTO } from '../config';
+import * as m from 'motion/react-m';
 import Cabecalho from './Cabecalho';
 import Divisor from './Ornamento';
 import InfoEvento from './InfoEvento';
@@ -15,7 +16,13 @@ interface Props {
  */
 export default function TelaGenerica({ motivo }: Props) {
   return (
-    <main className="papel">
+    <m.main
+      className="papel"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+    >
       <Cabecalho ilustracao="urso-lua" apoio="Você está convidado para o nosso chá de bebê." />
 
       <Divisor className="mt-10" />
@@ -49,6 +56,6 @@ export default function TelaGenerica({ motivo }: Props) {
       </section>
 
       <Divisor className="mt-10" />
-    </main>
+    </m.main>
   );
 }

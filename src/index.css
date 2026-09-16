@@ -224,6 +224,20 @@
 }
 
 @layer components {
+  /* Durante a troca, a tela que sai e a que entra coexistem por alguns frames.
+     Um grid de uma célula só, com os dois filhos na mesma célula, faz elas se
+     sobreporem em vez de empilharem verticalmente — e sem depender de ref nem
+     de position:absolute escrito à mão, que quebraria o `margin-inline: auto`
+     do papel. */
+  .palco {
+    display: grid;
+    min-height: 100svh;
+  }
+
+  .palco > * {
+    grid-area: 1 / 1;
+  }
+
   /* ----- A folha de papel ----- */
 
   .papel {

@@ -7,6 +7,13 @@
  * mal.
  */
 
+/**
+ * O `layoutId` do nome do bebê. Ele aparece em três telas em posições e
+ * tamanhos diferentes, e é o mesmo elemento viajando entre elas — por isso o id
+ * vive numa constante, e não repetido como string solta em cada arquivo.
+ */
+export const LAYOUT_NOME = 'nome-bebe';
+
 const ESTRELA =
   'M12 1 L14.7 8.28 L22.46 8.6 L16.37 13.42 L18.47 20.9 ' +
   'L12 16.6 L5.53 20.9 L7.63 13.42 L1.54 8.6 L9.3 8.28 Z';

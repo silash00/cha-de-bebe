@@ -1,5 +1,6 @@
+import * as m from 'motion/react-m';
 import { EVENTO } from '../config';
-import Divisor from './Ornamento';
+import Divisor, { LAYOUT_NOME } from './Ornamento';
 
 interface Props {
   /** Ilustração sob o nome. Ausente nas telas que não são o convite em si. */
@@ -38,9 +39,12 @@ export default function Cabecalho({ ilustracao = null, saudacao, apoio }: Props)
         Chá de bebê
       </p>
 
-      <h1 className="display relevo anima-subir mt-1 text-[4rem] leading-[1.05] font-black text-tinta">
+      <m.h1
+        layoutId={LAYOUT_NOME}
+        className="display relevo mt-1 text-[4rem] leading-[1.05] font-black text-tinta"
+      >
         {EVENTO.bebe}
-      </h1>
+      </m.h1>
 
       <Divisor className="mt-6" />
 

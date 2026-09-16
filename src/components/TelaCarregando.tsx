@@ -1,5 +1,6 @@
+import * as m from 'motion/react-m';
 import { EVENTO } from '../config';
-import { Estrela } from './Ornamento';
+import { Estrela, LAYOUT_NOME } from './Ornamento';
 
 /**
  * Sem JavaScript de animação e sem imagem: só CSS e um SVG inline, para pintar
@@ -8,7 +9,13 @@ import { Estrela } from './Ornamento';
  */
 export default function TelaCarregando() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center gap-8 px-6">
+    <m.div
+      className="flex min-h-svh flex-col items-center justify-center gap-8 px-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+    >
       <p
         className="anima-surgir text-[0.6875rem] font-medium uppercase text-sage-deep"
         style={{ letterSpacing: '0.34em', textIndent: '0.34em' }}
@@ -16,7 +23,12 @@ export default function TelaCarregando() {
         Chá de bebê
       </p>
 
-      <p className="display relevo anima-subir text-[3rem] leading-none font-black text-tinta">{EVENTO.bebe}</p>
+      <m.p
+        layoutId={LAYOUT_NOME}
+        className="display relevo text-[3rem] leading-none font-black text-tinta"
+      >
+        {EVENTO.bebe}
+      </m.p>
 
       <div className="flex gap-3" aria-hidden="true">
         {/* O atraso escalonado faz as três estrelas pulsarem em onda. */}
@@ -34,6 +46,6 @@ export default function TelaCarregando() {
       <p className="sr-only" role="status">
         Abrindo seu convite…
       </p>
-    </div>
+    </m.div>
   );
 }

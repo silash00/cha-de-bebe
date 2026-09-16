@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Convite, Pessoa, Status } from '../types';
 import { EVENTO } from '../config';
+import * as m from 'motion/react-m';
 import Cabecalho from './Cabecalho';
 import Divisor from './Ornamento';
 import InfoEvento from './InfoEvento';
@@ -26,7 +27,13 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
   const nenhumRespondido = pessoas.every((p) => p.status === 'pendente');
 
   return (
-    <main className="papel">
+    <m.main
+      className="papel"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+    >
       <Cabecalho
         ilustracao="urso-lua"
         saudacao={`Olá, ${convite.saudacao}`}
@@ -123,6 +130,6 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
       )}
 
       <Divisor className="mt-10" />
-    </main>
+    </m.main>
   );
 }
