@@ -1,4 +1,6 @@
+import { useEffect, useMemo } from 'react';
 import { EVENTO } from '../config';
+import { NOME_ICS, textoIcs, urlGoogleAgenda } from '../calendario';
 import Icone from './Icone';
 
 /**
@@ -6,6 +8,16 @@ import Icone from './Icone';
  * filete e por espaço, como num convite impresso.
  */
 export default function InfoEvento() {
+  // O .ics nasce aqui, do EVENTO, e não de um arquivo em public/: assim existe
+  // um só lugar com a data. O Blob vira URL uma vez por montagem e é revogado
+  // na saída — sem isso, cada troca de tela deixaria um arquivo pendurado na
+  // memória da aba.
+  const urlIcs = useMemo(
+    () => URL.createObjectURL(new Blob([textoIcs()], { type: 'text/calendar;charset=utf-8' })),
+    []
+  );
+  useEffect(() => () => URL.revokeObjectURL(urlIcs), [urlIcs]);
+
   return (
     <section>
       <dl className="space-y-7 text-center">
@@ -20,18 +32,35 @@ export default function InfoEvento() {
           <dd className="mt-1 text-sm text-tinta-suave">
             {EVENTO.diaSemana}, a partir das {EVENTO.hora}
           </dd>
-          {/* Simétrico ao "Ver no mapa" do bloco de baixo: cada dado do evento
-              oferece a ação que lhe cabe. Sem `target`: o .ics não é uma página
-              a visitar — o aparelho intercepta e abre a folha do calendário. */}
-          <dd className="mt-4">
-            <a
-              href={`/${EVENTO.calendario}`}
-              download
-              className="elo text-[0.8125rem] uppercase"
-              style={{ letterSpacing: '0.14em' }}
-            >
-              Adicionar ao calendário
-            </a>
+          {/* Dois caminhos porque são dois mundos: quem usa Google Agenda ganha
+              o formulário pronto; quem usa iPhone ou Outlook ganha o arquivo,
+              que o aparelho abre no calendário nativo. Detectar a plataforma
+              pelo user-agent erraria caso demais e ainda esconderia a escolha. */}
+          <dd className="mt-5">
+            <span className="rotulo block">Adicionar ao calendário</span>
+            <span className="mt-2 flex items-center justify-center gap-3">
+              <a
+                href={urlGoogleAgenda()}
+                target="_blank"
+                rel="noreferrer"
+                className="elo text-[0.8125rem] uppercase"
+                style={{ letterSpacing: '0.14em' }}
+              >
+                Google Agenda
+              </a>
+              <span aria-hidden="true" className="text-sage-deep/50">
+                ·
+              </span>
+              {/* Sem `target`: o arquivo não é uma página a visitar. */}
+              <a
+                href={urlIcs}
+                download={NOME_ICS}
+                className="elo text-[0.8125rem] uppercase"
+                style={{ letterSpacing: '0.14em' }}
+              >
+                Apple / Outlook
+              </a>
+            </span>
           </dd>
         </div>
 

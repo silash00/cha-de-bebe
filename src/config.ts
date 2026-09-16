@@ -28,14 +28,13 @@ export const EVENTO = {
   dataCurta: '12 de outubro de 2026',
   diaSemana: 'Segunda-feira (feriado)',
   hora: '12h',
+  // O começo e o fim em forma de máquina, com o fuso escrito: é daqui que
+  // saem o link do Google e o .ics, e é contra isto que o teste confere.
+  inicio: '2026-10-12T12:00:00-03:00',
+  fim: '2026-10-12T17:00:00-03:00',
   local: 'Espaço Rizo',
   endereco: 'Rua Alvilândia, 231 — Rochdale, Osasco/SP',
   referencia: 'em cima da UBS',
   mapa: 'https://maps.app.goo.gl/xtqXCiMMBhBNzEB68',
-  // Convite de calendário servido de public/. É um arquivo estático, e não um
-  // Blob montado no navegador, porque o Safari do iOS é irregular com
-  // `blob:` + download — e o iPhone é o aparelho da maioria dos convidados.
-  // O preço é repetir aqui o que está lá; src/calendario.test.ts costura os dois.
-  calendario: 'cha-do-yuri.ics',
   whatsappAnfitriao: 'https://wa.me/5511982112619',
 } as const;

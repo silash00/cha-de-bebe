@@ -1,18 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import { EVENTO } from './config';
-// `?raw` traz o arquivo cru pelo próprio pipeline do Vite, sem CRLF normalizado
-// e sem precisar de @types/node só para um readFileSync.
-import ICS from '../public/cha-do-yuri.ics?raw';
+import {
+  DETALHES,
+  LOCAL_COMPLETO,
+  TITULO,
+  paraUtcCompacto,
+  textoIcs,
+  urlGoogleAgenda,
+} from './calendario';
 
-/**
- * O arquivo importado e o EVENTO precisam contar a mesma história.
- *
- * O .ics é um arquivo estático em public/, e não um Blob gerado no cliente:
- * o Safari do iOS é irregular com `blob:` + download, e iPhone é o aparelho
- * da maioria dos convidados. O preço disso é que o arquivo repete o que já
- * está no EVENTO — então este teste é a costura entre os dois. Mudar a data
- * no config e esquecer o .ics quebra aqui, não na agenda de quem foi convidado.
- */
+const ICS = textoIcs();
 
 /** Desdobra as linhas dobradas em 75 octetos, como manda o RFC 5545. */
 const LINHAS: string[] = ICS.replace(/\r\n[ \t]/g, '').split('\r\n');
@@ -23,7 +20,44 @@ function campo(nome: string): string {
   return linha.slice(linha.indexOf(':') + 1);
 }
 
-describe('convite de calendário', () => {
+/** Desfaz os escapes de texto do RFC 5545 (vírgula e quebra de linha). */
+function desescapar(valor: string): string {
+  return valor.replace(/\\n/g, '\n').replace(/\\([,;\\\\])/g, '$1');
+}
+
+describe('paraUtcCompacto', () => {
+  it('converte um horário de Brasília para o UTC compacto do calendário', () => {
+    // 12h em Brasília (UTC-3, sem horário de verão desde 2019) são 15h em UTC.
+    expect(paraUtcCompacto('2026-10-12T12:00:00-03:00')).toBe('20261012T150000Z');
+  });
+
+  it('recusa uma data que não dá para ler', () => {
+    expect(() => paraUtcCompacto('doze de outubro')).toThrow(/data inválida/);
+  });
+});
+
+describe('urlGoogleAgenda', () => {
+  const url = new URL(urlGoogleAgenda());
+
+  it('aponta para o formulário de evento do Google', () => {
+    expect(url.origin + url.pathname).toBe('https://calendar.google.com/calendar/render');
+    expect(url.searchParams.get('action')).toBe('TEMPLATE');
+  });
+
+  it('leva o mesmo título, local e detalhes do .ics', () => {
+    expect(url.searchParams.get('text')).toBe(TITULO);
+    expect(url.searchParams.get('location')).toBe(LOCAL_COMPLETO);
+    expect(url.searchParams.get('details')).toBe(DETALHES);
+  });
+
+  it('leva o intervalo do evento em UTC', () => {
+    expect(url.searchParams.get('dates')).toBe(
+      `${paraUtcCompacto(EVENTO.inicio)}/${paraUtcCompacto(EVENTO.fim)}`
+    );
+  });
+});
+
+describe('.ics', () => {
   it('é um VCALENDAR com um único VEVENT', () => {
     expect(LINHAS[0]).toBe('BEGIN:VCALENDAR');
     expect(LINHAS.at(-1)).toBe('');
@@ -36,10 +70,20 @@ describe('convite de calendário', () => {
     expect(ICS).not.toMatch(/(?<!\r)\n/);
   });
 
-  it('marca a data e a hora do evento em UTC', () => {
-    // 12h em Brasília (UTC-3, sem horário de verão desde 2019) são 15h em UTC.
-    expect(campo('DTSTART')).toBe('20261012T150000Z');
-    expect(campo('DTEND')).toBe('20261012T200000Z');
+  it('não passa de 75 octetos por linha', () => {
+    const codificador = new TextEncoder();
+    const longas = ICS.split('\r\n').filter((l) => codificador.encode(l).length > 75);
+    expect(longas).toEqual([]);
+  });
+
+  it('dobra a descrição sem partir um caractere acentuado ao meio', () => {
+    expect(desescapar(campo('DESCRIPTION'))).toContain('Alvilândia');
+    expect(ICS).not.toContain('\uFFFD');
+  });
+
+  it('marca o mesmo começo e fim que o EVENTO', () => {
+    expect(campo('DTSTART')).toBe(paraUtcCompacto(EVENTO.inicio));
+    expect(campo('DTEND')).toBe(paraUtcCompacto(EVENTO.fim));
   });
 
   it('marca a mesma data que o convite mostra na tela', () => {
@@ -69,21 +113,17 @@ describe('convite de calendário', () => {
     expect(EVENTO.hora).toBe(`${hora.replace(/\D/g, '')}h`);
   });
 
-  it('leva o nome do bebê no título', () => {
-    expect(campo('SUMMARY')).toContain(EVENTO.bebe);
+  it('leva o mesmo título que o link do Google', () => {
+    expect(campo('SUMMARY')).toBe(TITULO);
   });
 
   it('leva o local e o endereço do convite', () => {
-    const local = campo('LOCATION');
-    expect(local).toContain(EVENTO.local);
     // No .ics a vírgula é reservada e vai escapada; comparo sem o escape.
-    expect(local.replace(/\\,/g, ',')).toContain(EVENTO.endereco.replace(/—/g, '-'));
+    expect(desescapar(campo('LOCATION'))).toBe(LOCAL_COMPLETO);
   });
 
   it('descreve a referência e o mapa para quem abrir o evento', () => {
-    const descricao = campo('DESCRIPTION').replace(/\\,/g, ',').replace(/\\n/g, '\n');
-    expect(descricao).toContain(EVENTO.referencia);
-    expect(descricao).toContain(EVENTO.mapa);
+    expect(desescapar(campo('DESCRIPTION'))).toBe(DETALHES);
   });
 
   it('tem UID e DTSTAMP fixos, para reimportar atualizar em vez de duplicar', () => {
