@@ -1,6 +1,7 @@
 import { EVENTO } from '../config';
+import * as m from 'motion/react-m';
 import Cabecalho from './Cabecalho';
-import Divisor from './Ornamento';
+import Divisor, { PAPEL, SECAO } from './Ornamento';
 import InfoEvento from './InfoEvento';
 
 interface Props {
@@ -15,18 +16,26 @@ interface Props {
  */
 export default function TelaGenerica({ motivo }: Props) {
   return (
-    <main className="papel">
+    <m.main
+      className="papel"
+      variants={PAPEL}
+      initial="hidden"
+      animate="visible"
+      exit={{ opacity: 0, transition: { duration: 0.3 } }}
+    >
       <Cabecalho ilustracao="urso-lua" apoio="Você está convidado para o nosso chá de bebê." />
 
-      <Divisor className="mt-10" />
+      <m.div variants={SECAO} className="mt-10">
+        <Divisor />
+      </m.div>
 
-      <div className="mt-10">
+      <m.div variants={SECAO} className="mt-10">
         <InfoEvento />
-      </div>
+      </m.div>
 
-      <div aria-hidden="true" className="filete mt-10" />
+      <m.div variants={SECAO} aria-hidden="true" className="filete mt-10" />
 
-      <section className="mt-10 text-center">
+      <m.section variants={SECAO} className="mt-10 text-center">
         <p className="rotulo">Confirmar presença</p>
         {motivo === 'invalido' && (
           <p className="display mt-2 text-[1.25rem] font-semibold text-tinta">
@@ -46,9 +55,11 @@ export default function TelaGenerica({ motivo }: Props) {
             Falar com a gente
           </a>
         </p>
-      </section>
+      </m.section>
 
-      <Divisor className="mt-10" />
-    </main>
+      <m.div variants={SECAO} className="mt-10">
+        <Divisor />
+      </m.div>
+    </m.main>
   );
 }

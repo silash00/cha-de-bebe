@@ -1,6 +1,7 @@
 import type { Convite } from '../types';
+import * as m from 'motion/react-m';
 import { EVENTO } from '../config';
-import Divisor from './Ornamento';
+import Divisor, { LAYOUT_NOME } from './Ornamento';
 import InfoEvento from './InfoEvento';
 
 interface Props {
@@ -13,7 +14,13 @@ export default function TelaConfirmado({ convite, onEditar }: Props) {
   const ninguemVai = vao.length === 0;
 
   return (
-    <main className="papel">
+    <m.main
+      className="papel"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+    >
       <header className="flex flex-col items-center text-center">
         <Divisor acento={!ninguemVai} />
 
@@ -28,9 +35,14 @@ export default function TelaConfirmado({ convite, onEditar }: Props) {
           className="anima-subir mt-8 h-auto w-44"
         />
 
-        <h1 className="display relevo anima-subir mt-8 text-[2.5rem] leading-tight font-black text-tinta">
+        <m.h1
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="display relevo mt-8 text-[2.5rem] leading-tight font-black text-tinta"
+        >
           {ninguemVai ? 'Que pena!' : 'Até lá!'}
-        </h1>
+        </m.h1>
 
         <p className="mt-3 max-w-xs text-[0.9375rem] text-tinta-suave">
           {ninguemVai
@@ -101,11 +113,17 @@ export default function TelaConfirmado({ convite, onEditar }: Props) {
 
       <p className="mt-10 text-center">
         <span className="display text-[1.125rem] font-semibold text-tinta-suave italic">
-          com carinho, {EVENTO.bebe}
+          com carinho,{' '}
         </span>
+        <m.span
+          layoutId={LAYOUT_NOME}
+          className="display text-[1.125rem] font-semibold text-tinta-suave italic"
+        >
+          {EVENTO.bebe}
+        </m.span>
       </p>
 
       <Divisor className="mt-4" />
-    </main>
+    </m.main>
   );
 }

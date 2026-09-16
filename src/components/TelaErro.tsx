@@ -1,3 +1,4 @@
+import * as m from 'motion/react-m';
 import { EVENTO } from '../config';
 import Divisor from './Ornamento';
 
@@ -7,7 +8,13 @@ interface Props {
 
 export default function TelaErro({ onTentarDeNovo }: Props) {
   return (
-    <main className="papel flex flex-col items-center text-center">
+    <m.main
+      className="papel flex flex-col items-center text-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+    >
       <Divisor />
 
       <img
@@ -47,6 +54,6 @@ export default function TelaErro({ onTentarDeNovo }: Props) {
       </p>
 
       <Divisor className="mt-10" />
-    </main>
+    </m.main>
   );
 }

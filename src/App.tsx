@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { AnimatePresence } from 'motion/react';
 import { lerToken } from './token';
 import { buscarConvite, confirmar } from './api';
 import type { Convite, Pessoa } from './types';
@@ -92,34 +93,57 @@ export default function App() {
     });
   }
 
-  switch (estado.nome) {
-    case 'carregando':
-      return <TelaCarregando />;
-    case 'sem-token':
-      return <TelaGenerica motivo="sem-token" />;
-    case 'invalido':
-      return <TelaGenerica motivo="invalido" />;
-    case 'erro':
-      return <TelaErro onTentarDeNovo={() => void carregar()} />;
-    case 'convite':
-      return (
-        <TelaConvite
-          key={geracao}
-          convite={estado.convite}
-          enviando={enviando}
-          aviso={aviso}
-          onConfirmar={(pessoas, recado) => void enviar(pessoas, recado)}
-        />
-      );
-    case 'confirmado':
-      return (
-        <TelaConfirmado
-          convite={estado.convite}
-          onEditar={() => {
-            setAviso(null);
-            setEstado({ nome: 'convite', convite: estado.convite });
-          }}
-        />
-      );
+  function tela() {
+    switch (estado.nome) {
+      case 'carregando':
+        return <TelaCarregando key="carregando" />;
+      case 'sem-token':
+        return <TelaGenerica key="generica-sem-token" motivo="sem-token" />;
+      case 'invalido':
+        return <TelaGenerica key="generica-invalido" motivo="invalido" />;
+      case 'erro':
+        return <TelaErro key="erro" onTentarDeNovo={() => void carregar()} />;
+      case 'convite':
+        return (
+          <TelaConvite
+            // A `geracao` entra na key para a tela remontar após
+            // `convite_mudou` e reinicializar os toggles — comportamento que
+            // já existia e não pode se perder na troca para AnimatePresence.
+            key={`convite-${geracao}`}
+            convite={estado.convite}
+            enviando={enviando}
+            aviso={aviso}
+            onConfirmar={(pessoas, recado) => void enviar(pessoas, recado)}
+          />
+        );
+      case 'confirmado':
+        return (
+          <TelaConfirmado
+            key="confirmado"
+            convite={estado.convite}
+            onEditar={() => {
+              setAviso(null);
+              setEstado({ nome: 'convite', convite: estado.convite });
+            }}
+          />
+        );
+    }
   }
+
+  // Modo padrão (sync), não "wait" nem "popLayout".
+  //
+  //   "wait"      — a tela nova só montaria depois da saída terminar, e o nome
+  //                 não teria como fazer a passagem num movimento só.
+  //   "popLayout" — precisa clonar o filho com uma ref para tirá-lo do fluxo, e
+  //                 os filhos aqui são componentes nossos, que não encaminham
+  //                 ref para o nó do DOM. Daria warning e não poparia.
+  //
+  // No modo padrão as duas telas coexistem por alguns frames. Para não
+  // empilharem verticalmente, o .palco é um grid de uma célula só e ambas
+  // ocupam essa mesma célula.
+  return (
+    <div className="palco">
+      <AnimatePresence initial={false}>{tela()}</AnimatePresence>
+    </div>
+  );
 }
