@@ -21,7 +21,12 @@ export const TIMEOUT_MS = 15000;
 export const BACKOFF_MS = [0, 600, 1800];
 
 export const EVENTO = {
+  bebe: 'Yuri',
   data: 'Segunda-feira, 12 de outubro de 2026',
+  // Quebrada em duas para o cartão editorial: a data em Bodoni grande, o
+  // resto em corpo pequeno logo abaixo.
+  dataCurta: '12 de outubro de 2026',
+  diaSemana: 'Segunda-feira (feriado)',
   hora: '12h',
   local: 'Espaço Rizo',
   endereco: 'Rua Alvilândia, 231 — Rochdale, Osasco/SP',

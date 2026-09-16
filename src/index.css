@@ -1,1 +1,395 @@
 @import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Fontes — servidas por nós, não pelo CDN do Google.
+
+   A Fraunces é variável (peso, tamanho óptico, SOFT e WONK), mas pedimos ao
+   Google valores FIXOS em cada eixo: ele então entrega uma instância estática
+   de ~20 KB em vez do arquivo variável de 120 KB. Como os eixos já estão
+   decididos, a flexibilidade em runtime não teria uso — seriam 100 KB pagos
+   à toa, no 4G do convidado.
+
+   Três instâncias sob o mesmo font-family: o navegador escolhe pelo
+   font-weight e pelo font-style, como faria com qualquer família.
+   Só o subset latin: português cabe inteiro em U+0000-00FF (á, ê, ã, ç).
+   --------------------------------------------------------------------------- */
+
+@font-face {
+  /* Títulos. opsz 144 (display) mantém o contraste alto; SOFT 100 arredonda os
+     terminais; WONK 1 liga as formas tortas, que são o caráter da fonte. */
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/fontes/fraunces-900.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  /* Valores dentro das seções (data, local, nomes). opsz 24 e WONK 0: em corpo
+     pequeno o desenho torto atrapalha a leitura em vez de dar caráter. */
+  font-family: 'Fraunces';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fontes/fraunces-600.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  /* Saudação e assinatura. */
+  font-family: 'Fraunces';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fontes/fraunces-600-ital.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url('/fontes/jost-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+/* ---------------------------------------------------------------------------
+   Tokens
+   --------------------------------------------------------------------------- */
+
+@theme {
+  --color-ivory: #f8f3e7;
+  --color-papel: #fdfbf5;
+  --color-sage: #a8bfa8;
+  --color-sage-deep: #4a5d42;
+  --color-sage-escuro: #3a4a33;
+  --color-tinta: #2f3a2c;
+  --color-tinta-suave: #5f6b59;
+  --color-taupe: #b99a7b;
+  --color-terracota: #d97b4f;
+
+  /* Terracota e taupe são lindos em desenho e reprovam em AA como texto
+     (2,9:1 e 2,6:1 sobre o papel). Estas são as versões escuras, para quando
+     a cor vira palavra ou superfície de botão em vez de traço. */
+  --color-terracota-texto: #a34a21;
+  --color-taupe-deep: #6b5644;
+  --color-taupe-escuro: #56432f;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans: 'Jost', ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+
+    /* Opacidade de cada trama do xadrez. As duas se cruzam, então a
+       interseção fica em ~2x este valor. Um número só para calibrar. */
+    --xadrez-alpha: 0.07;
+    --xadrez-celula: 13px;
+  }
+
+  /* O xadrez é a toalha de mesa; o convite é o papel apoiado nela. Por isso
+     ele vive no body e nunca passa atrás de texto. */
+  body {
+    min-height: 100dvh;
+    background-color: var(--color-ivory);
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgb(168 191 168 / var(--xadrez-alpha)) 0 var(--xadrez-celula),
+        transparent var(--xadrez-celula) calc(var(--xadrez-celula) * 2)
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgb(168 191 168 / var(--xadrez-alpha)) 0 var(--xadrez-celula),
+        transparent var(--xadrez-celula) calc(var(--xadrez-celula) * 2)
+      );
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .display,
+  h1,
+  h2 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  /* ----- A folha de papel ----- */
+
+  .papel {
+    position: relative;
+    /* A margem tem de sobreviver ao celular: sem ela o papel encosta nas
+       bordas, a toalha some e o efeito de "cartão apoiado" se perde. */
+    --margem: clamp(0.875rem, 4vw, 2.5rem);
+    width: min(30rem, 100% - 2 * var(--margem));
+    margin-inline: auto;
+    margin-block: var(--margem);
+    padding: clamp(2.25rem, 7vw, 3.25rem) clamp(1.5rem, 6vw, 2.75rem);
+    background-color: var(--color-papel);
+    /* Sem raio: papel tem canto reto. A sombra é rasa e deslocada para baixo —
+       o convite está apoiado na toalha, não flutuando sobre ela. */
+    box-shadow:
+      0 1px 2px rgb(47 58 44 / 0.05),
+      0 14px 34px -14px rgb(47 58 44 / 0.22);
+  }
+
+  /* O filete impresso que todo convite tem. Pseudo-elemento para não gastar um
+     elemento vazio nem entrar na ordem de leitura. */
+  .papel::before {
+    content: '';
+    position: absolute;
+    inset: clamp(0.6rem, 2.2vw, 0.9rem);
+    border: 1px solid rgb(168 191 168 / 0.55);
+    pointer-events: none;
+  }
+
+  /* Dentro do papel não existem cartões: as seções se separam por filete, como
+     num convite impresso. Cartão sobre papel seria papel sobre papel. */
+  .filete {
+    height: 1px;
+    background-color: rgb(168 191 168 / 0.5);
+  }
+
+  /* ----- Tipografia utilitária ----- */
+
+  .rotulo {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-sage-deep);
+  }
+
+  /* Relevo seco, como papelaria prensada: filete de luz embaixo da letra e
+     sombra fina em cima. Só em título; em corpo pequeno o filete engrossa a
+     letra e come a legibilidade, que é o oposto do que o relevo deve fazer. */
+  .relevo {
+    text-shadow:
+      0 1.5px 0 rgb(255 255 255 / 1),
+      0 -1px 1px rgb(47 58 44 / 0.3);
+  }
+
+  /* ----- Controles ----- */
+
+  .botao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 2.875rem;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition:
+      background-color 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease,
+      transform 80ms ease;
+  }
+
+  .botao:focus-visible {
+    outline: 2px solid var(--color-sage-deep);
+    outline-offset: 3px;
+  }
+
+  .botao:not(:disabled):active {
+    transform: translateY(1px);
+  }
+
+  .botao-primario {
+    background-color: var(--color-sage-deep);
+    border-color: var(--color-sage-deep);
+    color: var(--color-papel);
+  }
+
+  /* Desabilitado vira contorno, não fantasma cinza: continua legível e diz
+     "ainda não", em vez de parecer quebrado. */
+  .botao-primario:disabled {
+    background-color: transparent;
+    border-color: rgb(168 191 168 / 0.8);
+    color: var(--color-tinta-suave);
+    cursor: not-allowed;
+  }
+
+  .botao-contorno {
+    background-color: transparent;
+    border-color: rgb(168 191 168 / 0.9);
+    color: var(--color-tinta);
+  }
+
+  .botao-sim {
+    background-color: var(--color-sage-deep);
+    border-color: var(--color-sage-deep);
+    color: var(--color-papel);
+  }
+
+  /* "Não vou" não é erro e não é vermelho: é resposta legítima. Mesmo peso
+     visual do "Vou", só o tom muda. */
+  .botao-nao {
+    background-color: var(--color-taupe-deep);
+    border-color: var(--color-taupe-deep);
+    color: var(--color-papel);
+  }
+
+  .campo {
+    background-color: rgb(168 191 168 / 0.09);
+    border: 1px solid rgb(168 191 168 / 0.6);
+    border-radius: 2px;
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .campo:focus {
+    outline: 2px solid var(--color-sage-deep);
+    outline-offset: 2px;
+    background-color: transparent;
+  }
+
+  .aviso {
+    border: 1px solid;
+    border-radius: 2px;
+    background-color: rgb(168 191 168 / 0.08);
+  }
+
+  .elo {
+    color: var(--color-sage-deep);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: rgb(168 191 168 / 0.9);
+    transition:
+      color 160ms ease,
+      text-decoration-color 160ms ease;
+  }
+
+  /* Hover só onde existe ponteiro de verdade. No celular o :hover "gruda"
+     depois do toque e o botão fica preso no estado ativo. */
+  @media (hover: hover) {
+    .botao-primario:not(:disabled):hover,
+    .botao-sim:hover {
+      background-color: var(--color-sage-escuro);
+      border-color: var(--color-sage-escuro);
+    }
+
+    .botao-nao:hover {
+      background-color: var(--color-taupe-escuro);
+      border-color: var(--color-taupe-escuro);
+    }
+
+    .botao-contorno:hover {
+      background-color: rgb(168 191 168 / 0.16);
+      border-color: var(--color-sage-deep);
+    }
+
+    .campo:hover:not(:focus) {
+      border-color: rgb(168 191 168 / 0.9);
+    }
+
+    .elo:hover {
+      color: var(--color-sage-escuro);
+      text-decoration-color: currentColor;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Movimento — CSS puro, sem biblioteca.
+   --------------------------------------------------------------------------- */
+
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes surgir {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulsar {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes flutuar {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes desenhar {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@layer components {
+  .anima-subir {
+    animation: subir 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .anima-surgir {
+    animation: surgir 900ms ease-out both;
+  }
+  .anima-flutuar {
+    animation: flutuar 6s ease-in-out infinite;
+  }
+  .anima-pulsar {
+    animation: pulsar 1.6s ease-in-out infinite;
+  }
+  .anima-desenhar {
+    animation: desenhar 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

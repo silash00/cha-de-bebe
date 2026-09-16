@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { Convite, Pessoa, Status } from '../types';
 import { EVENTO } from '../config';
+import Cabecalho from './Cabecalho';
+import Divisor from './Ornamento';
 import InfoEvento from './InfoEvento';
 import ListaPessoas from './ListaPessoas';
 
@@ -24,37 +26,51 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
   const nenhumRespondido = pessoas.every((p) => p.status === 'pendente');
 
   return (
-    <main className="mx-auto max-w-md space-y-8 px-5 py-10">
-      <header className="space-y-2 text-center">
-        <p className="text-5xl" aria-hidden="true">
-          👶
-        </p>
-        <h1 className="text-2xl text-stone-800">Olá, {convite.saudacao}!</h1>
-        <p className="text-stone-600">Você foi convidado para o nosso chá de bebê.</p>
-      </header>
+    <main className="papel">
+      <Cabecalho
+        ilustracao="urso-lua"
+        saudacao={`Olá, ${convite.saudacao}`}
+        apoio="Você foi convidado para o nosso chá de bebê. Será uma alegria ter você por perto."
+      />
 
-      <InfoEvento />
+      <Divisor className="mt-10" />
+
+      <div className="mt-10">
+        <InfoEvento />
+      </div>
 
       {convite.fralda && (
-        <section className="rounded-lg bg-stone-100 p-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-stone-500">
-            Sugestão de presente
-          </p>
-          <p className="text-stone-800">Fraldas tamanho {convite.fralda}</p>
-          <p className="mt-1 text-sm text-stone-600">
-            Separamos os tamanhos entre os convidados para não faltar nem sobrar.
-          </p>
-        </section>
+        <>
+          <div aria-hidden="true" className="filete mt-10" />
+          <section className="mt-10 text-center">
+            <p className="rotulo">Presente</p>
+            <p className="display mt-2 text-[1.375rem] font-semibold text-tinta">
+              Fraldas tamanho {convite.fralda}
+            </p>
+            <p className="mt-2 text-sm text-tinta-suave">
+              Separamos os tamanhos entre os convidados para não faltar nem sobrar.
+            </p>
+          </section>
+        </>
       )}
 
-      <section className="space-y-3">
-        <h2 className="text-stone-800">Quem vem?</h2>
-        <ListaPessoas pessoas={pessoas} onChange={alterar} />
+      <Divisor className="mt-10" />
+
+      <section className="mt-10">
+        <h2 className="display relevo text-center text-[1.75rem] font-black text-tinta">
+          Quem vem?
+        </h2>
+        <p className="mt-2 text-center text-sm text-tinta-suave">
+          Responda por cada pessoa do convite.
+        </p>
+        <div className="mt-6">
+          <ListaPessoas pessoas={pessoas} onChange={alterar} />
+        </div>
       </section>
 
-      <section className="space-y-2">
-        <label htmlFor="recado" className="block text-sm text-stone-600">
-          Quer deixar um recado? (opcional)
+      <section className="mt-8">
+        <label htmlFor="recado" className="rotulo block text-center">
+          Recado (opcional)
         </label>
         <textarea
           id="recado"
@@ -62,25 +78,28 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
           onChange={(e) => setRecado(e.target.value)}
           rows={3}
           maxLength={500}
-          className="w-full rounded-lg border border-stone-200 bg-white p-3 text-stone-800"
+          placeholder={`Deixe um carinho para o ${EVENTO.bebe}…`}
+          className="campo mt-3 w-full px-4 py-3 text-[0.9375rem] text-tinta placeholder:text-tinta-suave"
         />
       </section>
 
       {aviso === 'convite_mudou' && (
-        <div role="alert" className="rounded-lg border border-stone-300 bg-white p-4">
-          <p className="text-stone-800">A lista deste convite foi atualizada.</p>
-          <p className="mt-1 text-sm text-stone-600">
+        <div role="alert" className="aviso mt-6 border-taupe px-5 py-4">
+          <p className="text-[0.9375rem] text-tinta">A lista deste convite foi atualizada.</p>
+          <p className="mt-1 text-sm text-tinta-suave">
             Recarregamos os nomes acima. Confira e confirme de novo, por favor.
           </p>
         </div>
       )}
 
       {aviso === 'falha' && (
-        <div role="alert" className="rounded-lg border border-stone-300 bg-white p-4">
-          <p className="text-stone-800">Não conseguimos registrar sua resposta.</p>
-          <p className="mt-1 text-sm text-stone-600">
+        <div role="alert" className="aviso mt-6 border-terracota px-5 py-4">
+          <p className="text-[0.9375rem] text-tinta">
+            Não conseguimos registrar sua resposta.
+          </p>
+          <p className="mt-1 text-sm text-tinta-suave">
             Suas escolhas continuam aqui — é só tentar de novo. Se insistir em falhar,{' '}
-            <a href={EVENTO.whatsappAnfitriao} className="underline underline-offset-2">
+            <a href={EVENTO.whatsappAnfitriao} className="elo">
               nos chame no WhatsApp
             </a>
             .
@@ -92,16 +111,18 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
         type="button"
         disabled={enviando || nenhumRespondido}
         onClick={() => onConfirmar(pessoas, recado)}
-        className="min-h-12 w-full rounded-lg bg-stone-800 text-white disabled:opacity-40"
+        className="botao botao-primario mt-8 w-full"
       >
-        {enviando ? 'Enviando…' : 'Confirmar'}
+        {enviando ? 'Enviando…' : 'Confirmar presença'}
       </button>
 
       {nenhumRespondido && (
-        <p className="-mt-6 text-center text-sm text-stone-500">
+        <p className="mt-3 text-center text-sm text-tinta-suave">
           Marque quem vai antes de confirmar.
         </p>
       )}
+
+      <Divisor className="mt-10" />
     </main>
   );
 }

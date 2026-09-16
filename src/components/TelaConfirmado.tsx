@@ -1,4 +1,6 @@
 import type { Convite } from '../types';
+import { EVENTO } from '../config';
+import Divisor from './Ornamento';
 import InfoEvento from './InfoEvento';
 
 interface Props {
@@ -8,54 +10,102 @@ interface Props {
 
 export default function TelaConfirmado({ convite, onEditar }: Props) {
   const vao = convite.pessoas.filter((p) => p.status === 'sim');
-  const naoVao = convite.pessoas.filter((p) => p.status === 'nao');
   const ninguemVai = vao.length === 0;
 
   return (
-    <main className="mx-auto max-w-md space-y-8 px-5 py-10">
-      <header className="space-y-2 text-center">
-        <p className="text-5xl" aria-hidden="true">
-          {ninguemVai ? '💛' : '🎉'}
-        </p>
-        <h1 className="text-2xl text-stone-800">
-          {ninguemVai ? 'Que pena!' : 'Presença confirmada!'}
+    <main className="papel">
+      <header className="flex flex-col items-center text-center">
+        <Divisor acento={!ninguemVai} />
+
+        {/* Quem vem ganha o urso nos balões; quem não vem, o urso dormindo.
+            A ilustração carrega o tom, para o texto não precisar insistir. */}
+        <img
+          src={ninguemVai ? '/ilustracoes/urso-lua.webp' : '/ilustracoes/urso-baloes.webp'}
+          width={ninguemVai ? 506 : 479}
+          height={ninguemVai ? 549 : 687}
+          alt=""
+          decoding="async"
+          className="anima-subir mt-8 h-auto w-44"
+        />
+
+        <h1 className="display relevo anima-subir mt-8 text-[2.5rem] leading-tight font-black text-tinta">
+          {ninguemVai ? 'Que pena!' : 'Até lá!'}
         </h1>
-        <p className="text-stone-600">
+
+        <p className="mt-3 max-w-xs text-[0.9375rem] text-tinta-suave">
           {ninguemVai
             ? 'Vamos sentir sua falta. Obrigado por avisar.'
-            : 'Já anotamos. Estamos ansiosos para ver você!'}
+            : 'Sua presença está registrada. Estamos ansiosos para ver você.'}
         </p>
+
+        <Divisor className="mt-8" acento={!ninguemVai} />
       </header>
 
-      <section className="space-y-1 rounded-lg bg-stone-100 p-4 text-stone-700">
-        {vao.length > 0 && (
-          <p>
-            <strong>{vao.length === 1 ? 'Vai:' : 'Vão:'}</strong>{' '}
-            {vao.map((p) => p.nome).join(', ')}
-          </p>
-        )}
-        {naoVao.length > 0 && (
-          <p>
-            <strong>{naoVao.length === 1 ? 'Não vai:' : 'Não vão:'}</strong>{' '}
-            {naoVao.map((p) => p.nome).join(', ')}
-          </p>
-        )}
+      <section className="mt-10">
+        <p className="rotulo text-center">Sua resposta</p>
+
+        {/* Índice editorial: nome à esquerda, resposta à direita, filete entre
+            as linhas. A ordem é a do convite — posição é a identidade da
+            pessoa, então reordenar por resposta confundiria quem confere. */}
+        <ul className="mt-5 divide-y divide-sage/40 border-y border-sage/40">
+          {convite.pessoas.map((p, i) => (
+            <li key={i} className="flex items-baseline justify-between gap-4 py-3.5">
+              <span
+                className={
+                  'display text-[1.25rem] font-semibold ' +
+                  (p.status === 'sim' ? 'text-tinta' : 'text-tinta-suave')
+                }
+              >
+                {p.nome}
+              </span>
+              <span
+                className={
+                  'rotulo shrink-0 ' +
+                  (p.status === 'sim'
+                    ? 'text-terracota-texto'
+                    : p.status === 'nao'
+                      ? 'text-taupe-deep'
+                      : 'text-sage-deep')
+                }
+              >
+                {/* 'pendente' aqui é possível: o envio não obriga marcar todo
+                    mundo. Dizer "não vai" por omissão seria inventar resposta. */}
+                {p.status === 'sim' ? 'vai' : p.status === 'nao' ? 'não vai' : 'sem resposta'}
+              </span>
+            </li>
+          ))}
+        </ul>
+
         {convite.fralda && !ninguemVai && (
-          <p>
-            <strong>Presente combinado:</strong> fraldas tamanho {convite.fralda}
+          <p className="mt-7 text-center">
+            <span className="rotulo">Presente combinado</span>
+            <span className="display mt-2 block text-[1.25rem] font-semibold text-tinta">
+              Fraldas tamanho {convite.fralda}
+            </span>
           </p>
         )}
       </section>
 
-      {!ninguemVai && <InfoEvento />}
+      {!ninguemVai && (
+        <>
+          <Divisor className="mt-10" />
+          <div className="mt-10">
+            <InfoEvento />
+          </div>
+        </>
+      )}
 
-      <button
-        type="button"
-        onClick={onEditar}
-        className="min-h-11 w-full rounded-lg border border-stone-300 text-stone-700"
-      >
+      <button type="button" onClick={onEditar} className="botao botao-contorno mt-10 w-full">
         Alterar minha resposta
       </button>
+
+      <p className="mt-10 text-center">
+        <span className="display text-[1.125rem] font-semibold text-tinta-suave italic">
+          com carinho, {EVENTO.bebe}
+        </span>
+      </p>
+
+      <Divisor className="mt-4" />
     </main>
   );
 }

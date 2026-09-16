@@ -4,20 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <title>Chá de Bebê</title>
+    <title>Chá de bebê do Yuri</title>
+
+    <!-- As fontes são nossas, não do CDN do Google: um round-trip a menos no 4G
+         do convidado. O preload existe porque o CSS que as declara só é
+         descoberto depois do JS — sem ele, a Fraunces chega tarde e o título
+         pisca em Georgia. -->
+    <link
+      rel="preload"
+      href="/fontes/fraunces-900.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="preload" href="/fontes/jost-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     <!-- Card do WhatsApp. og:image PRECISA de URL absoluta: o crawler nao
          resolve caminho relativo. Ele tambem nao executa JavaScript, entao le
          so este HTML — e por isso gerar o preview nao marca visto_em. -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Chá de bebê" />
+    <meta property="og:title" content="Chá de bebê do Yuri" />
     <meta
       property="og:description"
       content="Você foi convidado! Toque para ver o convite e confirmar presença."
     />
     <meta property="og:image" content="https://cha.silashenrique.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://cha.silashenrique.dev/" />
-    <meta name="theme-color" content="#fafaf9" />
+    <meta name="theme-color" content="#f8f3e7" />
   </head>
   <body>
     <div id="root"></div>

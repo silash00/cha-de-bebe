@@ -1,28 +1,45 @@
 import { EVENTO } from '../config';
 
+/**
+ * Os dados do evento. Dentro do papel não há cartão: a seção se delimita por
+ * filete e por espaço, como num convite impresso.
+ */
 export default function InfoEvento() {
   return (
-    <section className="space-y-3 text-stone-700">
-      <div>
-        <p className="text-xs font-medium uppercase tracking-wide text-stone-500">Quando</p>
-        <p>
-          {EVENTO.data}, às {EVENTO.hora}
-        </p>
-      </div>
-      <div>
-        <p className="text-xs font-medium uppercase tracking-wide text-stone-500">Onde</p>
-        <p>{EVENTO.local}</p>
-        <p className="text-sm text-stone-500">{EVENTO.endereco}</p>
-        <p className="text-sm text-stone-500">({EVENTO.referencia})</p>
-        <a
-          href={EVENTO.mapa}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-1 inline-block text-sm underline underline-offset-2"
-        >
-          Ver no mapa
-        </a>
-      </div>
+    <section>
+      <dl className="space-y-7 text-center">
+        <div>
+          <dt className="rotulo">Quando</dt>
+          <dd className="display mt-2 text-[1.375rem] leading-snug font-semibold text-tinta">
+            {EVENTO.dataCurta}
+          </dd>
+          <dd className="mt-1 text-sm text-tinta-suave">
+            {EVENTO.diaSemana}, a partir das {EVENTO.hora}
+          </dd>
+        </div>
+
+        <div aria-hidden="true" className="filete mx-auto w-10" />
+
+        <div>
+          <dt className="rotulo">Onde</dt>
+          <dd className="display mt-2 text-[1.375rem] leading-snug font-semibold text-tinta">
+            {EVENTO.local}
+          </dd>
+          <dd className="mt-1 text-sm text-tinta-suave">{EVENTO.endereco}</dd>
+          <dd className="text-sm text-tinta-suave">({EVENTO.referencia})</dd>
+          <dd className="mt-4">
+            <a
+              href={EVENTO.mapa}
+              target="_blank"
+              rel="noreferrer"
+              className="elo text-[0.8125rem] uppercase"
+              style={{ letterSpacing: '0.14em' }}
+            >
+              Ver no mapa
+            </a>
+          </dd>
+        </div>
+      </dl>
     </section>
   );
 }

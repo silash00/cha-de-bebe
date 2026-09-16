@@ -10,3 +10,6 @@ dist
 apps-script/
 docs/
 supabase/
+
+# Referências visuais e scripts de arte: locais, nunca publicados
+referencias/
