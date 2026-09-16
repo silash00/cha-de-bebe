@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { AnimatePresence } from 'motion/react';
 import { lerToken } from './token';
 import { buscarConvite, confirmar } from './api';
+import { subirAoTopo } from './scroll';
 import type { Convite, Pessoa } from './types';
 import TelaCarregando from './components/TelaCarregando';
 import TelaConvite, { type AvisoEnvio } from './components/TelaConvite';
@@ -37,7 +38,10 @@ export default function App() {
     const r = await buscarConvite(token, preview);
 
     if (r.tipo === 'nao_encontrado') return setEstado({ nome: 'invalido' });
-    if (r.tipo === 'erro') return setEstado({ nome: 'erro' });
+    if (r.tipo === 'erro') {
+      subirAoTopo();
+      return setEstado({ nome: 'erro' });
+    }
 
     setEstado({
       nome: r.convite.respondidoEm ? 'confirmado' : 'convite',
@@ -56,6 +60,7 @@ export default function App() {
 
     setEnviando(true);
     setAviso(null);
+    subirAoTopo();
 
     const r = await confirmar(token, pessoas, recado);
     setEnviando(false);
@@ -123,6 +128,7 @@ export default function App() {
             convite={estado.convite}
             onEditar={() => {
               setAviso(null);
+              subirAoTopo();
               setEstado({ nome: 'convite', convite: estado.convite });
             }}
           />
