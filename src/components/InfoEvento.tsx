@@ -1,4 +1,5 @@
 import { EVENTO } from '../config';
+import Icone from './Icone';
 
 /**
  * Os dados do evento. Dentro do papel não há cartão: a seção se delimita por
@@ -9,7 +10,10 @@ export default function InfoEvento() {
     <section>
       <dl className="space-y-7 text-center">
         <div>
-          <dt className="rotulo">Quando</dt>
+          <dt className="rotulo">
+            <Icone nome="calendario" atraso={0.2} />
+            Quando
+          </dt>
           <dd className="display mt-2 text-[1.375rem] leading-snug font-semibold text-tinta">
             {EVENTO.dataCurta}
           </dd>
@@ -21,7 +25,10 @@ export default function InfoEvento() {
         <div aria-hidden="true" className="filete mx-auto w-10" />
 
         <div>
-          <dt className="rotulo">Onde</dt>
+          <dt className="rotulo">
+            <Icone nome="pin" atraso={0.32} />
+            Onde
+          </dt>
           <dd className="display mt-2 text-[1.375rem] leading-snug font-semibold text-tinta">
             {EVENTO.local}
           </dd>

@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Convite, Pessoa, Status } from '../types';
 import { EVENTO } from '../config';
 import * as m from 'motion/react-m';
 import Cabecalho from './Cabecalho';
 import Divisor, { PAPEL, SECAO } from './Ornamento';
+import Icone from './Icone';
+import { trazerParaVista } from '../scroll';
 import InfoEvento from './InfoEvento';
 import ListaPessoas from './ListaPessoas';
 
@@ -25,6 +27,15 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
   }
 
   const nenhumRespondido = pessoas.every((p) => p.status === 'pendente');
+
+  // Ao enviar, o App sobe a página ao topo durante a ida ao Supabase. Se a
+  // resposta for um aviso, ele nasce aqui embaixo, longe da vista — então o
+  // aviso se traz para o olho. Quem é dono do elemento é quem sabe rolar até
+  // ele; o App não tem — nem deveria ter — referência para dentro desta tela.
+  const avisoRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (aviso) trazerParaVista(avisoRef.current);
+  }, [aviso]);
 
   return (
     <m.main
@@ -52,7 +63,10 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
         <m.div variants={SECAO}>
           <div aria-hidden="true" className="filete mt-10" />
           <section className="mt-10 text-center">
-            <p className="rotulo">Presente</p>
+            <p className="rotulo">
+              <Icone nome="presente" atraso={0.2} />
+              Presente
+            </p>
             <p className="display mt-2 text-[1.375rem] font-semibold text-tinta">
               Fraldas tamanho {convite.fralda}
             </p>
@@ -95,7 +109,7 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
       </m.section>
 
       {aviso === 'convite_mudou' && (
-        <div role="alert" className="aviso mt-6 border-taupe px-5 py-4">
+        <div ref={avisoRef} role="alert" className="aviso mt-6 border-taupe px-5 py-4">
           <p className="text-[0.9375rem] text-tinta">A lista deste convite foi atualizada.</p>
           <p className="mt-1 text-sm text-tinta-suave">
             Recarregamos os nomes acima. Confira e confirme de novo, por favor.
@@ -104,7 +118,7 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
       )}
 
       {aviso === 'falha' && (
-        <div role="alert" className="aviso mt-6 border-terracota px-5 py-4">
+        <div ref={avisoRef} role="alert" className="aviso mt-6 border-terracota px-5 py-4">
           <p className="text-[0.9375rem] text-tinta">
             Não conseguimos registrar sua resposta.
           </p>
