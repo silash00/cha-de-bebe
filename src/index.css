@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
    Fontes — servidas por nós, não pelo CDN do Google.
@@ -17,50 +17,54 @@
 @font-face {
   /* Títulos. opsz 144 (display) mantém o contraste alto; SOFT 100 arredonda os
      terminais; WONK 1 liga as formas tortas, que são o caráter da fonte. */
-  font-family: 'Fraunces';
+  font-family: "Fraunces";
   font-style: normal;
   font-weight: 900;
   font-display: swap;
-  src: url('/fontes/fraunces-900.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
+  src: url("/fontes/fraunces-900.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
   /* Valores dentro das seções (data, local, nomes). opsz 24 e WONK 0: em corpo
      pequeno o desenho torto atrapalha a leitura em vez de dar caráter. */
-  font-family: 'Fraunces';
+  font-family: "Fraunces";
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('/fontes/fraunces-600.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
+  src: url("/fontes/fraunces-600.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
   /* Saudação e assinatura. */
-  font-family: 'Fraunces';
+  font-family: "Fraunces";
   font-style: italic;
   font-weight: 600;
   font-display: swap;
-  src: url('/fontes/fraunces-600-ital.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
+  src: url("/fontes/fraunces-600-ital.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: 'Jost';
+  font-family: "Jost";
   font-style: normal;
   font-weight: 300 500;
   font-display: swap;
-  src: url('/fontes/jost-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
-    U+FEFF, U+FFFD;
+  src: url("/fontes/jost-latin.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
 
 /* ---------------------------------------------------------------------------
@@ -85,8 +89,8 @@
   --color-taupe-deep: #6b5644;
   --color-taupe-escuro: #56432f;
 
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-sans: 'Jost', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Jost", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
@@ -151,10 +155,10 @@
   /* O filete impresso que todo convite tem. Pseudo-elemento para não gastar um
      elemento vazio nem entrar na ordem de leitura. */
   .papel::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: clamp(0.6rem, 2.2vw, 0.9rem);
-    border: 1px solid rgb(168 191 168 / 0.55);
+    border: 3px dashed rgb(168 191 168 / 0.55);
     pointer-events: none;
   }
 
