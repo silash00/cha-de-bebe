@@ -20,6 +20,19 @@ export default function InfoEvento() {
           <dd className="mt-1 text-sm text-tinta-suave">
             {EVENTO.diaSemana}, a partir das {EVENTO.hora}
           </dd>
+          {/* Simétrico ao "Ver no mapa" do bloco de baixo: cada dado do evento
+              oferece a ação que lhe cabe. Sem `target`: o .ics não é uma página
+              a visitar — o aparelho intercepta e abre a folha do calendário. */}
+          <dd className="mt-4">
+            <a
+              href={`/${EVENTO.calendario}`}
+              download
+              className="elo text-[0.8125rem] uppercase"
+              style={{ letterSpacing: '0.14em' }}
+            >
+              Adicionar ao calendário
+            </a>
+          </dd>
         </div>
 
         <div aria-hidden="true" className="filete mx-auto w-10" />

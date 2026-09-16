@@ -32,5 +32,10 @@ export const EVENTO = {
   endereco: 'Rua Alvilândia, 231 — Rochdale, Osasco/SP',
   referencia: 'em cima da UBS',
   mapa: 'https://maps.app.goo.gl/xtqXCiMMBhBNzEB68',
+  // Convite de calendário servido de public/. É um arquivo estático, e não um
+  // Blob montado no navegador, porque o Safari do iOS é irregular com
+  // `blob:` + download — e o iPhone é o aparelho da maioria dos convidados.
+  // O preço é repetir aqui o que está lá; src/calendario.test.ts costura os dois.
+  calendario: 'cha-do-yuri.ics',
   whatsappAnfitriao: 'https://wa.me/5511982112619',
 } as const;

@@ -1,0 +1,24 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//cha.silashenrique.dev//Cha de bebe do Yuri//PT-BR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:cha-de-bebe-yuri-2026-10-12@cha.silashenrique.dev
+DTSTAMP:20260916T120000Z
+DTSTART:20261012T150000Z
+DTEND:20261012T200000Z
+SUMMARY:Chá de bebê do Yuri
+LOCATION:Espaço Rizo - Rua Alvilândia\, 231 - Rochdale\, Osasco/SP
+DESCRIPTION:Chá de bebê do Yuri!\n\nEspaço Rizo (em cima da UBS)\nRua Al
+ vilândia\, 231 - Rochdale\, Osasco/SP\nMapa: https://maps.app.goo.gl/xtqX
+ CiMMBhBNzEB68
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Chá de bebê do Yuri é amanhã
+TRIGGER:-P1D
+END:VALARM
+END:VEVENT
+END:VCALENDAR
