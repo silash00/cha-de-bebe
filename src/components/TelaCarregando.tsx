@@ -8,7 +8,7 @@ import { Estrela } from './Ornamento';
  */
 export default function TelaCarregando() {
   return (
-    <div className="flex min-h-dvh flex-col items-center justify-center gap-8 px-6">
+    <div className="flex min-h-svh flex-col items-center justify-center gap-8 px-6">
       <p
         className="anima-surgir text-[0.6875rem] font-medium uppercase text-sage-deep"
         style={{ letterSpacing: '0.34em', textIndent: '0.34em' }}

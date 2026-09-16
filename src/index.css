@@ -68,6 +68,95 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Faces de fallback com métricas ajustadas.
+
+   Sem isto, o swap da webfont move o texto — e como o FLIP do Motion mede
+   caixas antes de animar, um swap no meio do voo faz o nome aterrissar no
+   lugar errado. Isto é pré-requisito da animação, não polimento.
+
+   Duas faces por peso da serifada porque iOS tem Georgia e Android tem Noto
+   Serif, e elas diferem ~7,5pp em largura média. A que não resolver é pulada
+   pelo navegador. A sans precisa de uma só: Arial e Roboto ficam a 0,2pp uma
+   da outra.
+
+   Os números saíram dos próprios .woff2 deste repo, medidos com
+   @capsizecss/unpack; os das fontes de sistema, de @capsizecss/metrics.
+   Nenhuma destas faces baixa byte: local() só usa fonte já instalada.
+   --------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Fraunces fallback";
+  font-weight: 900;
+  src: local("Georgia");
+  size-adjust: 98.25%;
+  ascent-override: 99.54%;
+  descent-override: 25.95%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fraunces fallback android";
+  font-weight: 900;
+  src: local("Noto Serif");
+  size-adjust: 91.06%;
+  ascent-override: 107.40%;
+  descent-override: 28.00%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fraunces fallback";
+  font-weight: 600;
+  src: local("Georgia");
+  size-adjust: 108.12%;
+  ascent-override: 90.46%;
+  descent-override: 23.58%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fraunces fallback android";
+  font-weight: 600;
+  src: local("Noto Serif");
+  size-adjust: 100.21%;
+  ascent-override: 97.60%;
+  descent-override: 25.45%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fraunces fallback";
+  font-style: italic;
+  font-weight: 600;
+  src: local("Georgia");
+  size-adjust: 104.98%;
+  ascent-override: 93.16%;
+  descent-override: 24.29%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Fraunces fallback android";
+  font-style: italic;
+  font-weight: 600;
+  src: local("Noto Serif");
+  size-adjust: 97.30%;
+  ascent-override: 100.51%;
+  descent-override: 26.21%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Jost fallback";
+  font-weight: 300 500;
+  src: local("Arial"), local("Roboto");
+  size-adjust: 96.01%;
+  ascent-override: 111.45%;
+  descent-override: 39.06%;
+  line-gap-override: 0%;
+}
+
+/* ---------------------------------------------------------------------------
    Tokens
    --------------------------------------------------------------------------- */
 
@@ -89,8 +178,10 @@
   --color-taupe-deep: #6b5644;
   --color-taupe-escuro: #56432f;
 
-  --font-display: "Fraunces", Georgia, serif;
-  --font-sans: "Jost", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display:
+    "Fraunces", "Fraunces fallback", "Fraunces fallback android", Georgia, serif;
+  --font-sans:
+    "Jost", "Jost fallback", ui-sans-serif, system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
