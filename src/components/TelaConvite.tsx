@@ -3,7 +3,7 @@ import type { Convite, Pessoa, Status } from '../types';
 import { EVENTO } from '../config';
 import * as m from 'motion/react-m';
 import Cabecalho from './Cabecalho';
-import Divisor from './Ornamento';
+import Divisor, { PAPEL, SECAO } from './Ornamento';
 import InfoEvento from './InfoEvento';
 import ListaPessoas from './ListaPessoas';
 
@@ -29,10 +29,10 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
   return (
     <m.main
       className="papel"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      variants={PAPEL}
+      initial="hidden"
+      animate="visible"
+      exit={{ opacity: 0, transition: { duration: 0.3 } }}
     >
       <Cabecalho
         ilustracao="urso-lua"
@@ -40,14 +40,16 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
         apoio="Você foi convidado para o nosso chá de bebê. Será uma alegria ter você por perto."
       />
 
-      <Divisor className="mt-10" />
+      <m.div variants={SECAO} className="mt-10">
+        <Divisor />
+      </m.div>
 
-      <div className="mt-10">
+      <m.div variants={SECAO} className="mt-10">
         <InfoEvento />
-      </div>
+      </m.div>
 
       {convite.fralda && (
-        <>
+        <m.div variants={SECAO}>
           <div aria-hidden="true" className="filete mt-10" />
           <section className="mt-10 text-center">
             <p className="rotulo">Presente</p>
@@ -58,12 +60,14 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
               Separamos os tamanhos entre os convidados para não faltar nem sobrar.
             </p>
           </section>
-        </>
+        </m.div>
       )}
 
-      <Divisor className="mt-10" />
+      <m.div variants={SECAO} className="mt-10">
+        <Divisor />
+      </m.div>
 
-      <section className="mt-10">
+      <m.section variants={SECAO} className="mt-10">
         <h2 className="display relevo text-center text-[1.75rem] font-black text-tinta">
           Quem vem?
         </h2>
@@ -73,9 +77,9 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
         <div className="mt-6">
           <ListaPessoas pessoas={pessoas} onChange={alterar} />
         </div>
-      </section>
+      </m.section>
 
-      <section className="mt-8">
+      <m.section variants={SECAO} className="mt-8">
         <label htmlFor="recado" className="rotulo block text-center">
           Recado (opcional)
         </label>
@@ -88,7 +92,7 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
           placeholder={`Deixe um carinho para o ${EVENTO.bebe}…`}
           className="campo mt-3 w-full px-4 py-3 text-[0.9375rem] text-tinta placeholder:text-tinta-suave"
         />
-      </section>
+      </m.section>
 
       {aviso === 'convite_mudou' && (
         <div role="alert" className="aviso mt-6 border-taupe px-5 py-4">
@@ -114,14 +118,15 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
         </div>
       )}
 
-      <button
+      <m.button
+        variants={SECAO}
         type="button"
         disabled={enviando || nenhumRespondido}
         onClick={() => onConfirmar(pessoas, recado)}
         className="botao botao-primario mt-8 w-full"
       >
         {enviando ? 'Enviando…' : 'Confirmar presença'}
-      </button>
+      </m.button>
 
       {nenhumRespondido && (
         <p className="mt-3 text-center text-sm text-tinta-suave">
