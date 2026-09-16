@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { LazyMotion, domMax } from 'motion/react';
+import { LazyMotion, MotionConfig, domMax } from 'motion/react';
 import './index.css';
 import App from './App';
 
@@ -15,7 +15,13 @@ createRoot(document.getElementById('root')!).render(
         strict faz o build falhar se alguém importar `motion.*` completo em
         vez de `m.*`, o que anularia a economia do LazyMotion. */}
     <LazyMotion features={domMax} strict>
-      <App />
+      {/* O bloco de prefers-reduced-motion no CSS só alcança animação CSS: o
+          Motion anima por WAAPI e estilo inline e passa direto por ele. Com
+          reducedMotion="user", transform e layout ficam desligados na árvore
+          toda e sobra opacidade, que não causa desconforto vestibular. */}
+      <MotionConfig reducedMotion="user">
+        <App />
+      </MotionConfig>
     </LazyMotion>
   </StrictMode>
 );

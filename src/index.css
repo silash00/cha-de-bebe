@@ -493,6 +493,10 @@
   }
 }
 
+/* Este bloco só alcança animação CSS. O Motion anima por WAAPI e estilo
+   inline e passa direto por ele — quem desliga as animações de layout é o
+   <MotionConfig reducedMotion="user"> em src/main.tsx. Os dois são
+   necessários: este cobre as anima-* que sobraram (urso, estrelas). */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
