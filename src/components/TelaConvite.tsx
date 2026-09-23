@@ -45,10 +45,15 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
       animate="visible"
       exit={{ opacity: 0, transition: { duration: 0.3 } }}
     >
+      {/* A abertura é a mesma para todo mundo, e por isso mora aqui e não no
+          banco: quem o convite nomeia são as pessoas da lista abaixo, em Bodoni
+          grande, uma por linha. O campo `saudacao` do convite segue existindo,
+          agora só como rótulo interno para saber de quem é cada token ao olhar
+          a tabela — a tela não o usa. */}
       <Cabecalho
         ilustracao="urso-lua"
-        saudacao={`Olá, ${convite.saudacao}`}
-        apoio="Você foi convidado para o nosso chá de bebê. Será uma alegria ter você por perto."
+        saudacao="Com alegria, convidamos você."
+        apoio="Será uma alegria ter você por perto. Confirme abaixo quem vem."
       />
 
       <m.div variants={SECAO} className="mt-10">

@@ -12,3 +12,8 @@ supabase/
 
 # Referências visuais e scripts de arte: locais, nunca publicados
 referencias/
+
+# Lista de convidados: nomes reais, nunca versionar.
+lista.csv
+*.csv
+*.csv.bak
