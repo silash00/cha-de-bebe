@@ -93,7 +93,7 @@ export default function TelaConfirmado({ convite, onEditar }: Props) {
           <p className="mt-7 text-center">
             <span className="rotulo block">
               <Icone nome="presente" atraso={0.2} />
-              Presente combinado
+              Sugestão de presente
             </span>
             <span className="display mt-2 block text-[1.25rem] font-semibold text-tinta">
               Fraldas tamanho {convite.fralda} + mimo

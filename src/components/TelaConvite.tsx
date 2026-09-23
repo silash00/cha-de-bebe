@@ -53,7 +53,7 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
       <Cabecalho
         ilustracao="urso-lua"
         saudacao="Com alegria, convidamos você."
-        apoio="Queremos muito ver você por perto."
+        apoio="Vamos celebrar a chegada do nosso Yuri."
         chamada="Confirme abaixo quem vem"
       />
 
@@ -71,13 +71,10 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
           <section className="mt-10 text-center">
             <p className="rotulo">
               <Icone nome="presente" atraso={0.2} />
-              Presente
+              Sugestão de presente
             </p>
             <p className="display mt-2 text-[1.375rem] font-semibold text-tinta">
               Fraldas tamanho {convite.fralda} + mimo
-            </p>
-            <p className="mt-2 text-sm text-tinta-suave">
-              Separamos os tamanhos entre os convidados para não faltar nem sobrar.
             </p>
           </section>
         </m.div>
@@ -93,6 +90,9 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
         </h2>
         <p className="mt-2 text-center text-sm text-tinta-suave">
           Responda por cada pessoa do convite.
+        </p>
+        <p className="mx-auto mt-1 max-w-[17rem] text-center text-[0.8125rem] text-tinta-suave">
+          Crianças menores de 10 anos não precisam ser confirmadas.
         </p>
         <div className="mt-6">
           <ListaPessoas pessoas={pessoas} onChange={alterar} />

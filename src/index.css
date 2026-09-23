@@ -331,10 +331,15 @@
 
   /* Desabilitado vira contorno, não fantasma cinza: continua legível e diz
      "ainda não", em vez de parecer quebrado. */
+  /* Desabilitado, mas preenchido: vazado ele sumia no papel, e quem abre o
+     convite via a ação principal como se fosse um link qualquer. O sálvia
+     lavado mantém a presença do botão e ainda diz "ainda não" — o contraste
+     com o estado ativo, que é o sálvia fechado com texto claro, é grande o
+     bastante para a diferença ser lida sem precisar tentar clicar. */
   .botao-primario:disabled {
-    background-color: transparent;
-    border-color: rgb(168 191 168 / 0.8);
-    color: var(--color-tinta-suave);
+    background-color: rgb(168 191 168 / 0.45);
+    border-color: transparent;
+    color: var(--color-tinta);
     cursor: not-allowed;
   }
 
