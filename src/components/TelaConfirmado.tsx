@@ -96,7 +96,7 @@ export default function TelaConfirmado({ convite, onEditar }: Props) {
               Presente combinado
             </span>
             <span className="display mt-2 block text-[1.25rem] font-semibold text-tinta">
-              Fraldas tamanho {convite.fralda}
+              Fraldas tamanho {convite.fralda} + mimo
             </span>
           </p>
         )}

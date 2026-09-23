@@ -9,6 +9,8 @@ interface Props {
   saudacao?: string;
   /** Linha de apoio abaixo da saudação. */
   apoio?: string;
+  /** A ação que a tela pede. Ganha destaque próprio, abaixo do apoio. */
+  chamada?: string;
 }
 
 const ILUSTRACOES = {
@@ -25,7 +27,7 @@ const ILUSTRACOES = {
  * Topo comum a todas as telas. O nome do bebê é o herói tipográfico: tudo em
  * volta — as caixas altas espaçadas, os divisores, o ar — existe para emoldurá-lo.
  */
-export default function Cabecalho({ ilustracao = null, saudacao, apoio }: Props) {
+export default function Cabecalho({ ilustracao = null, saudacao, apoio, chamada }: Props) {
   const arte = ilustracao ? ILUSTRACOES[ilustracao] : null;
 
   return (
@@ -71,6 +73,17 @@ export default function Cabecalho({ ilustracao = null, saudacao, apoio }: Props)
       )}
 
       {apoio && <p className="mt-3 max-w-xs text-[0.9375rem] text-tinta-suave">{apoio}</p>}
+
+      {/* Mesmo rótulo das seções do papel — "QUANDO", "ONDE", "PRESENTE" —
+          agora dizendo o que fazer. O destaque vem de ser outra voz tipográfica
+          que a do apoio, e do ar em volta; não de cor quente nem de corpo
+          maior, que disputariam com a saudação em Bodoni logo acima.
+
+          A cor é a do texto de apoio, e não o sálvia dos rótulos de seção:
+          assim a chamada pertence ao parágrafo que a antecede em vez de se
+          anunciar como uma seção nova. O que a destaca é só a caixa alta e o
+          ar em volta. */}
+      {chamada && <p className="rotulo anima-subir mt-7 text-tinta-suave">{chamada}</p>}
     </header>
   );
 }

@@ -54,13 +54,18 @@ export default function Icone({ nome, atraso = 0 }: Props) {
       strokeWidth="1.8"
       strokeLinecap="round"
       strokeLinejoin="round"
-      // initial/animate explícitos fazem deste SVG a raiz da própria variant.
-      // Sem isso o ícone dependeria da propagação vinda do papel — que existe
-      // na TelaConvite, mas não na TelaConfirmado, cujo main anima por objeto
-      // e não por variants. O modo de falha seria um ícone invisível, preso em
-      // pathLength 0, e ícone invisível é pior que ícone parado.
+      // initial/whileInView explícitos fazem deste SVG a raiz da própria
+      // variant. Sem isso o ícone dependeria da propagação vinda do papel — que
+      // existe na TelaConvite, mas não na TelaConfirmado, cujo main anima por
+      // objeto e não por variants. O modo de falha seria um ícone invisível,
+      // preso em pathLength 0, e ícone invisível é pior que ícone parado.
       initial={semMovimento ? 'visivel' : 'oculto'}
-      animate="visivel"
+      // whileInView e não animate: "Onde" e "Presente" nascem abaixo da dobra,
+      // e no mount terminariam de se desenhar antes de alguém olhar. Quem rola
+      // encontraria um traço parado. `once` porque o desenho é uma chegada, não
+      // um efeito de rolagem — repetir a cada passagem viraria enfeite.
+      whileInView="visivel"
+      viewport={{ once: true, amount: 0.6 }}
     >
       {tracos.map((d, i) => (
         <m.path

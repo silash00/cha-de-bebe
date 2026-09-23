@@ -53,7 +53,8 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
       <Cabecalho
         ilustracao="urso-lua"
         saudacao="Com alegria, convidamos você."
-        apoio="Será uma alegria ter você por perto. Confirme abaixo quem vem."
+        apoio="Queremos muito ver você por perto."
+        chamada="Confirme abaixo quem vem"
       />
 
       <m.div variants={SECAO} className="mt-10">
@@ -73,7 +74,7 @@ export default function TelaConvite({ convite, enviando, aviso, onConfirmar }: P
               Presente
             </p>
             <p className="display mt-2 text-[1.375rem] font-semibold text-tinta">
-              Fraldas tamanho {convite.fralda}
+              Fraldas tamanho {convite.fralda} + mimo
             </p>
             <p className="mt-2 text-sm text-tinta-suave">
               Separamos os tamanhos entre os convidados para não faltar nem sobrar.

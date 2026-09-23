@@ -31,7 +31,7 @@ export const EVENTO = {
   // O começo e o fim em forma de máquina, com o fuso escrito: é daqui que
   // saem o link do Google e o .ics, e é contra isto que o teste confere.
   inicio: '2026-10-12T12:00:00-03:00',
-  fim: '2026-10-12T17:00:00-03:00',
+  fim: '2026-10-12T18:00:00-03:00',
   local: 'Espaço Rizo',
   endereco: 'Rua Alvilândia, 231 — Rochdale, Osasco/SP',
   referencia: 'em cima da UBS',
